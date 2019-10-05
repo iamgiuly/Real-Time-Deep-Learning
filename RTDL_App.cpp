@@ -1,8 +1,8 @@
+
 /*extern "C" {
 #include "/home/giulia/darknet/include/darknet.h"
 
 }*/
-
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>  
 #include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat, Scalar)
@@ -22,7 +22,6 @@ pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 
 //Crea un buffer circolare di Mat Object della capacità di 2000 elementi
 boost::circular_buffer<Mat> cb(200);
-
 
 VideoCapture VideoStream("/media/video2.mp4");
 //VideoCapture VideoStream(0);
@@ -61,8 +60,7 @@ void *produttore(void *arg) {
                 cb.push_back(frame);
                 if (!frame.empty()) 
                 cout << "produttore \n\n" << endl; 
-                pthread_mutex_unlock(&mtx);  
-                
+                pthread_mutex_unlock(&mtx);                 
     
 			}
 			
@@ -71,11 +69,10 @@ void *produttore(void *arg) {
 	}
 
 
-
-
 void *consumatore(void *arg) {
 	struct timespec t;
 	int i = *(int*)arg; //inserito per stampare in output l'indice del lettore come verifica
+
 
 	clock_gettime(CLOCK_MONOTONIC, &t);
 	time_add_ms(&t, 1000);   
@@ -85,14 +82,16 @@ void *consumatore(void *arg) {
 		
         Mat frame; 
                    
+
         pthread_mutex_lock(&mtx); 
         frame = cb.back(); //Recupera un puntatore all'ultimo elemento inserito, aggiornato con la primitiva push_back()                 
         pthread_mutex_unlock(&mtx); 
+
         
 	        if (!frame.empty()) {
 			
 			switch(i) {
-		
+	
 			case 2: {
 
 				imshow(WindowName, frame);
@@ -124,13 +123,17 @@ int main() {
 	
 
 	pthread_create(&tid1, NULL, produttore, NULL);
+
 	clock_nanosleep(CLOCK_MONOTONIC, 0, &dt, NULL); 
 	pthread_create(&tid2, NULL, consumatore, &id2);
 	clock_nanosleep(CLOCK_MONOTONIC, 0, &dt, NULL);
+
 	pthread_create(&tid2, NULL, consumatore, &id3);
 	pthread_join(tid1, NULL);
 	pthread_join(tid2, NULL);
 	pthread_join(tid3, NULL);
 	pthread_exit(NULL);
 
+
 }
+
