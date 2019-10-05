@@ -1,7 +1,7 @@
-extern "C" {
+/*extern "C" {
 #include "/home/giulia/darknet/include/darknet.h"
 
-}
+}*/
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>  
