@@ -17,7 +17,7 @@ using namespace cv;
 using namespace std;
 
 
-//Definisce e inizializza la variabile mutex (semaforo binario)
+//Definisce e inizializza la variabile mutex
 pthread_mutex_t mtx = PTHREAD_MUTEX_INITIALIZER;
 
 //Crea un buffer circolare di Mat Object della capacità di 2000 elementi
